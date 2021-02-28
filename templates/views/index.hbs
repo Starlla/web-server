@@ -4,14 +4,22 @@
 <head>
   <title>Home</title>
   <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/app.js"></script>
+  <link rel="icon" href="/img/weather-icon.png">
 </head>
 
 <body>
   <div class="main-content">
     {{>header}}
+    <form>
+      <input placeholder="location">
+      <button>Search</button>
+    </form>
+    <p id="message-1"></p>
+    <p id="message-2"></p>
   </div>
+
   {{>footer}}
 </body>
+<script src="/js/app.js"></script>
 
 </html>

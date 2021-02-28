@@ -1,6 +1,9 @@
 const express = require('express')
 const path = require('path')
 const hbs = require('hbs')
+require('dotenv').config();
+const geocode = require('./utils/geocode')
+const forcast = require('./utils/forcast')
 
 const app = express()
 //Define paths for Express config
@@ -20,19 +23,60 @@ app.use(express.static(publicDirectoryPath))
 app.get('', (req, res) => {
   res.render('index', {
     title: 'Weather App',
-    name: 'Claire'
+    name: 'Chuyu Tong'
   })
 })
 app.get('/about', (req, res) => {
   res.render('about', {
     title: 'About',
-    name: 'Claire'
+    name: 'Chuyu Tong'
   })
 })
 app.get('/help', (req, res) => {
   res.render('help', {
     title: 'Help',
-    name: 'Claire'
+    name: 'Chuyu Tong'
+  })
+})
+
+app.get('/weather', (req, res) => {
+  if (!req.query.search) {
+    return res.send({
+      error: 'You must provide a search term'
+    })
+  }
+  const address = req.query.search
+
+  geocode(address, (error, { latitude, longitude, location } = {}) => {
+    if (error) {
+      return res.send({ error })
+    }
+
+    forcast(latitude, longitude, (error, forcastData) => {
+      if (error) {
+        return res.send({ error })
+      }
+      res.send({
+        location, forcastData,
+        address: req.query.search
+      })
+    })
+  })
+
+
+
+})
+
+
+app.get('/products', (req, res) => {
+  if (!req.query.search) {
+    return res.send({
+      error: 'You must provide a search term'
+    })
+  }
+
+  res.send({
+    products: []
   })
 })
 
